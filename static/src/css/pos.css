@@ -535,7 +535,7 @@ td {
             box-sizing: border-box;
     position:absolute;
     left:0;
-    width:440px;
+    width:240px;
     top:0px;
     bottom:0;
     border-right: solid 1px #CECBCB;
@@ -606,12 +606,16 @@ td {
     background: #6EC89B !important;
     border: solid 1px #64AF8A !important; 
     color: white !important;
+    height: 64px;
+    width: 200px;
 }
 .pos .control-button.altlight,
 .pos .button.altlight {
     background: #7F82AC !important;
     border: solid 1px #756A99 !important;
     color: white !important;
+    height: 64px;
+    width: 100px;
 }
 .pos .control-button.disabled,
 .pos .control-button.disabled:active{
@@ -785,7 +789,7 @@ td {
     position: absolute;
     top: 0;
     bottom:0;
-    left: 440px;
+    left: 240px;
     right: 0;
     vertical-align: top;
     -webkit-transform: translate3d(0,0,0);
@@ -1039,8 +1043,8 @@ td {
     line-height: 100px;
     font-size: 11px;
     margin: 8px !important;
-    width: 122px;
-    height:115px;
+    width: 222px;
+    height:215px;
     background:#fff;
     border: 1px solid #e2e2e2;
     border-radius: 3px;
@@ -1051,15 +1055,15 @@ td {
 
 .pos .product .product-img {
     position: relative;
-    width: 120px;
-    height: 100px;
+    width: 200px;
+    height: 180px;
     background: white;
     text-align: center;
 }
 
 .pos .product .product-img img {
-    max-height: 100px;
-    max-width:  120px;
+    max-height: 180px;
+    max-width:  200px;
     vertical-align: middle;
 }
 
@@ -1083,7 +1087,7 @@ td {
             box-sizing: border-box;
     bottom:0;
     top:auto;
-    line-height: 14px;
+    line-height: 19px;
     width:100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1151,7 +1155,7 @@ td {
 .screen .top-content{
     position: absolute;
     left: 0px; top: 0px; right: 0px;
-    height: 64px;
+    height: 90px;
     border-bottom: dashed 1px rgb(215,215,215);
     text-align: center;
 }
@@ -1175,20 +1179,29 @@ td {
     background: black;
     border-color: black;
     color: white;
+
 }
 .screen .top-content .button.highlight {
     background: rgb(110,200,155);
     color: white;
     border: solid 1px rgb(110,200,155);
+    height: 64px;
+    width: 100px;
 }
 .screen .top-content .button.highlight:hover {
     background: rgb(120,210,165);
+    height: 64px;
+    width: 100px;
 }
 .screen .top-content .button.back {
     left: 0px;
     margin-left: 16px;
+    height: 64px;
+    width: 100px;
 }
 .screen .top-content .button.next{
+    height: 64px;
+    width: 100px;
     right: 0px;
     margin-right: 16px;
 }
@@ -1388,6 +1401,8 @@ td {
 .payment-screen .payment-buttons .button.highlight:not(:first-child) {
     margin-top: -1px;
     border-top: solid 1px;
+    height: 64px;
+    width: 100px;
 }
 .payment-screen .payment-buttons .button:active {
     background: black;
@@ -1397,6 +1412,8 @@ td {
 .payment-screen .payment-buttons .button.highlight .fa {
     border-color: rgba(0, 0, 0, 0.109804);
     background: rgba(0, 0, 0, 0.0980392);
+    height: 64px;
+    width: 100px;
 }
 .payment-screen .payment-buttons .button .fa {
     position: absolute;
@@ -1635,6 +1652,8 @@ td {
     transition: all 150ms linear;
     background: rgb(110,200,155) !important;
     color: white;
+    height: 64px;
+    width: 100px;
 }
 .pos .clientlist-screen .client-list tr.lowlight{
     transition: all 150ms linear;
@@ -1962,8 +1981,8 @@ td {
 }
 .paymentmethods .button {
     background: #e2e2e2;
-    line-height: 74px;
-    font-size: 16px;
+    line-height: 174px;
+    font-size: 24px;
     border: solid 1px rgb(202, 202, 202);
     border-top-width: 0px;
     cursor: pointer;
