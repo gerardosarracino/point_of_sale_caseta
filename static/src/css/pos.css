@@ -1044,7 +1044,7 @@ td {
     font-size: 11px;
     margin: 8px !important;
     width: 222px;
-    height:215px;
+    height:100px;
     background:#fff;
     border: 1px solid #e2e2e2;
     border-radius: 3px;
@@ -1056,13 +1056,13 @@ td {
 .pos .product .product-img {
     position: relative;
     width: 200px;
-    height: 180px;
+    height: 100px;
     background: white;
     text-align: center;
 }
 
 .pos .product .product-img img {
-    max-height: 180px;
+    max-height: 100px;
     max-width:  200px;
     vertical-align: middle;
 }
