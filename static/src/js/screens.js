@@ -1104,6 +1104,8 @@ var ProductScreenWidget = ScreenWidget.extend({
         },
 
     click_product: function(product) {
+
+
        if(product.to_weight && this.pos.config.iface_electronic_scale){
            this.gui.show_screen('scale',{product: product});
        }else{
@@ -1161,8 +1163,13 @@ var ProductScreenWidget = ScreenWidget.extend({
 
                 this.gui.show_screen('receipt');
 
+
+
                 console.log(this.numpad.state.deleteLastChar());
                 this.numpad.state.deleteLastChar();
+
+                // LO DE ABAJO HACE QUE SE SALE TODO EL PROCESO DEL TICKET, VER SI NO PERJUDICA LA IMPRESION
+                this.pos.get_order().finalize();
             }
 
 
@@ -1787,11 +1794,11 @@ var ReceiptScreenWidget = ScreenWidget.extend({
 
 
         var order = this.pos.get_order();
-        console.log(' RECEIPT ', this.pos)
-        console.log(' RECEIPT x2 ', order)
-        console.log(' RECEIPT x3 ', order.export_for_printing())
-        console.log(' RECEIPT x4 ', order.get_orderlines())
-        console.log(' RECEIPT x5', order.get_paymentlines())
+//        console.log(' RECEIPT ', this.pos)
+//        console.log(' RECEIPT x2 ', order)
+//        console.log(' RECEIPT x3 ', order.export_for_printing())
+//        console.log(' RECEIPT x4 ', order.get_orderlines())
+//        console.log(' RECEIPT x5', order.get_paymentlines())
 
         var ticket_id = "";
         var date = new Date();
@@ -1814,10 +1821,6 @@ var ReceiptScreenWidget = ScreenWidget.extend({
         id_sesion: this.id_sesion, id_producto: this.id_producto}, // data recive un objeto con la informacion que se enviara al servidor
         dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
         })
-
-        console.log(this.id_producto, ' PRODUCTO ', "http://localhost:4269/venta_pos_controller/"+ this.pos.user.id +"/"
-        + this.ticket_id + "/"
-        + this.monto_siva + "/" + this.monto_iva + "/"  + this.id_sesion + "/"  + this.id_producto);
 
         return {
             widget: this,
@@ -1897,6 +1900,7 @@ var ReceiptScreenWidget = ScreenWidget.extend({
         var self = this;
         this._super();
         this.$('.next').click(function(){
+            console.log(' SIGUIENTE ');
             if (!self._locked) {
                 self.click_next();
             }
