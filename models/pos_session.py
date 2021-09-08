@@ -8,6 +8,8 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_is_zero
 
+import time
+from datetime import datetime
 
 class PosSession(models.Model):
     _name = 'pos.session'
@@ -200,7 +202,8 @@ class PosSession(models.Model):
                 'journal_id': cash_journal.id,
                 'user_id': self.env.user.id,
                 'name': pos_name,
-                'balance_start': self.env["account.bank.statement"]._get_opening_balance(cash_journal.id) if cash_journal.type == 'cash' else 0
+                'balance_start': self.env["account.bank.statement"]._get_opening_balance(
+                    cash_journal.id) if cash_journal.type == 'cash' else 0
             }
             statement_ids |= statement_ids.with_context(ctx).create(st_values)
 
@@ -209,6 +212,19 @@ class PosSession(models.Model):
             'statement_ids': [(6, 0, statement_ids.ids)],
             'config_id': config_id,
         })
+        hora = datetime.strftime(fields.Datetime.now(), '%H:%M:%S')
+
+        print(hora)
+        turno = ''
+        if hora >= '07:00:00' and hora <= '14:59:59':
+            turno = 'Matutino'
+        if hora >= '15:00:00' and hora <= '22:59:59':
+            turno = 'Vespertino'
+        if hora >= '23:00:00' and hora <= '23:59:59' or hora >= '00:00:00' and hora <= '06:59:59':
+            turno = 'Nocturno'
+        print(turno, ' TURNO ')
+
+        values['turno'] = turno
 
         if self.user_has_groups('point_of_sale.group_pos_user'):
             res = super(PosSession, self.with_context(ctx).sudo()).create(values)
@@ -245,6 +261,8 @@ class PosSession(models.Model):
         return True
 
     dolares = fields.Float(string="Entrada de dolares de la sesion")
+
+    turno = fields.Char('Turno de la sesion al momento de iniciar')
     
     def action_pos_session_closing_control(self):
 

@@ -679,6 +679,10 @@ exports.PosModel = Backbone.Model.extend({
         if (this.db.load('pos_session_id') !== this.pos_session.id) {
             this.set_cashier(this.employee);
         }
+        // console.log('CAMBIO DE CAJERO', this.get('cashier'), this.employee);
+
+
+
         return this.db.get_cashier() || this.get('cashier') || this.employee;
     },
     // changes the current cashier
@@ -2426,6 +2430,7 @@ exports.Order = Backbone.Model.extend({
         this.paymentlines.each(_.bind( function(item) {
             return paymentLines.push([0, 0, item.export_as_JSON()]);
         }, this));
+
         var json = {
             name: this.get_name(),
             amount_paid: this.get_total_paid() - this.get_change(),

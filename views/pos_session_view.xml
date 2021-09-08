@@ -72,6 +72,7 @@
 
                         <!-- DOLARES MOD -->
 
+                        <field name="turno" attrs="{'readonly' : [('state', '=', 'closed')]}"/>
                         <field name="dolares" attrs="{'readonly' : [('state', '=', 'closed')]}"/>
 
                     </group>

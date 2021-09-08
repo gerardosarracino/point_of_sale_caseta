@@ -1144,12 +1144,26 @@ var ProductScreenWidget = ScreenWidget.extend({
 //                var payment_method = this.pos.payment_methods_by_id[1];
 //                var order = this.pos.get_order();
 //                order.add_paymentline(payment_method);
+
+//                var uid = "";
+//                var ticket_id = "";
+//                var date = new Date();
+//                this.uid = "0" + this.pos.config.carril + date.getFullYear() +("0" + (date.getMonth() + 1)).slice(-2) + date.getDate() +
+//                date.getHours() + date.getMinutes() + date.getSeconds() + parseInt(Math.random().toFixed(2)*100);
+//                this.ticket_id = _.str.sprintf(this.uid);
+
+//                $.ajax({
+//                type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
+//                url:"http://localhost:4269/venta_controller/"+ id_usuario +"/" + this.ticket_id, //url guarda la ruta hacia donde se hace la peticion
+//                data:{id_usuario: id_usuario, func_id: this.ticket_id}, // data recive un objeto con la informacion que se enviara al servidor
+//                dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
+//                })
+
+                this.gui.show_screen('receipt');
+
+                console.log(this.numpad.state.deleteLastChar());
+                this.numpad.state.deleteLastChar();
             }
-
-           //this.gui.show_screen('receipt');
-
-
-           // window.open("http://localhost:4269/venta_controller/2");
 
 
 
@@ -1768,8 +1782,43 @@ var ReceiptScreenWidget = ScreenWidget.extend({
             this.$('.next').addClass('highlight');
         }
     },
-    get_receipt_render_env: function() {
+    // VENTA CONTROLLER
+    get_receipt_render_env: function() { // AL MANDAR EL RECIBO TAMBIEN QUE MANDE LA VENTA POR CONTROLLER PARA SALTAR EL PASO DE LA VENTA
+
+
         var order = this.pos.get_order();
+        console.log(' RECEIPT ', this.pos)
+        console.log(' RECEIPT x2 ', order)
+        console.log(' RECEIPT x3 ', order.export_for_printing())
+        console.log(' RECEIPT x4 ', order.get_orderlines())
+        console.log(' RECEIPT x5', order.get_paymentlines())
+
+        var ticket_id = "";
+        var date = new Date();
+        var monto_siva = 0;
+        var monto_iva = 0;
+        var id_sesion = 0;
+        var id_producto = 0;
+
+        this.ticket_id = order.export_for_printing().name;
+        this.monto_siva = order.export_for_printing().subtotal;
+        this.monto_iva = order.export_for_printing().total_tax;
+        this.id_sesion = order.pos_session_id;
+        this.id_producto = order.export_for_printing().orderlines[0].product_name;
+
+        $.ajax({
+        type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
+        url:"http://localhost:4269/venta_pos_controller/"+ this.pos.user.id +"/" + this.ticket_id + "/"
+        + this.monto_siva + "/" + this.monto_iva + "/"  + this.id_sesion + "/"  + this.id_producto, //url guarda la ruta hacia donde se hace la peticion
+        data:{id_usuario: this.pos.user.id, func_id: this.ticket_id, monto_siva: this.monto_siva,
+        id_sesion: this.id_sesion, id_producto: this.id_producto}, // data recive un objeto con la informacion que se enviara al servidor
+        dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
+        })
+
+        console.log(this.id_producto, ' PRODUCTO ', "http://localhost:4269/venta_pos_controller/"+ this.pos.user.id +"/"
+        + this.ticket_id + "/"
+        + this.monto_siva + "/" + this.monto_iva + "/"  + this.id_sesion + "/"  + this.id_producto);
+
         return {
             widget: this,
             pos: this.pos,
