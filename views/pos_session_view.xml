@@ -19,8 +19,7 @@
 
                     <button id="validate_opened" name="action_pos_session_closing_control" type="object" string="Validate Closing &amp; Post Entries"
                         attrs="{'invisible' : ['|', ('cash_control', '=', True),('state', '!=', 'opened')]}"
-                        class="oe_highlight"  confirm="Antes de cerrar la session introduzca la entrada de dolares de este carril primero!!.
-                                                        Si ya introdujo los dolares de esta sesion puede proseguir clickeando 'Aceptar'" />
+                        class="oe_highlight"   />
 
                     <button id="validate_closing_control" name="action_pos_session_validate" type="object" string="Validate Closing &amp; Post Entries" states="closing_control"
                         class="oe_highlight"/>
