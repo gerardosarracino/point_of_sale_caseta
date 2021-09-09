@@ -11,6 +11,7 @@ from odoo.tools import float_is_zero
 import time
 from datetime import datetime
 
+
 class PosSession(models.Model):
     _name = 'pos.session'
     _order = 'id desc'

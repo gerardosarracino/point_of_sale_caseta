@@ -3,32 +3,45 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-
+import time
+from datetime import datetime
+import psycopg2
+import pytz
 
 class PosDetails(models.TransientModel):
     _name = 'pos.details.wizard'
     _description = 'Point of Sale Details Report'
 
     def _default_start_date(self):
-        """ Find the earliest start_date of the latests sessions """
-        # restrict to configs available to the user
-        config_ids = self.env['pos.config'].search([]).ids
-        # exclude configs has not been opened for 2 days
-        self.env.cr.execute("""
-            SELECT
-            max(start_at) as start,
-            config_id
-            FROM pos_session
-            WHERE config_id = ANY(%s)
-            AND start_at > (NOW() - INTERVAL '2 DAYS')
-            GROUP BY config_id
-        """, (config_ids,))
-        latest_start_dates = [res['start'] for res in self.env.cr.dictfetchall()]
-        # earliest of the latest sessions
-        return latest_start_dates and min(latest_start_dates) or fields.Datetime.now()
+        fecha_dma3 = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        dt = datetime.strptime(str(fecha_dma3), '%Y-%m-%d %H:%M:%S')
+        fecha_dma3 = datetime.strftime(dt, '%Y-%m-%d')
+        hora = datetime.strftime(dt, '%H:%M:%S')
+        if hora >= '07:00:00' and hora <= '14:59:59':
+            fecha_dma3 = fecha_dma3 + ' 07:00:00'
+        if hora >= '15:00:00' and hora <= '22:59:59':
+            fecha_dma3 = fecha_dma3 + ' 15:00:00'
+        if hora >= '23:00:00' and hora <= '06:59:59':
+            fecha_dma3 = fecha_dma3 + ' 23:00:00'
+        return fecha_dma3
+
+    def _default_end_date(self):
+        fecha_dma3 = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        dt = datetime.strptime(str(fecha_dma3), '%Y-%m-%d %H:%M:%S')
+        fecha_dma3 = datetime.strftime(dt, '%Y-%m-%d')
+        hora = datetime.strftime(dt, '%H:%M:%S')
+        turno = ''
+        if hora >= '07:00:00' and hora <= '14:59:59':
+            fecha_dma3 = fecha_dma3 + ' 14:59:00'
+        if hora >= '15:00:00' and hora <= '22:59:59':
+            fecha_dma3 = fecha_dma3 + ' 22:59:59'
+        if hora >= '23:00:00' and hora <= '06:59:59':
+            fecha_dma3 = fecha_dma3 + ' 06:59:59'
+        return fecha_dma3
 
     start_date = fields.Datetime(required=True, default=_default_start_date)
-    end_date = fields.Datetime(required=True, default=fields.Datetime.now)
+    end_date = fields.Datetime(required=True, default=_default_end_date)
+
     pos_config_ids = fields.Many2many('pos.config', 'pos_detail_configs',
         default=lambda s: s.env['pos.config'].search([]))
 

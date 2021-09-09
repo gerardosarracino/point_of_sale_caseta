@@ -275,6 +275,8 @@ exports.PosModel = Backbone.Model.extend({
             return domain;
         },
         loaded: function(self, pos_sessions, tmp){
+            console.log(pos_sessions[0], ' SESIONES ');
+
             self.pos_session = pos_sessions[0];
             self.pos_session.login_number = odoo.login_number;
             self.config_id = self.config_id || self.pos_session && self.pos_session.config_id[0];
@@ -552,6 +554,7 @@ exports.PosModel = Backbone.Model.extend({
 
     // loads all the needed data on the sever. returns a promise indicating when all the data has loaded.
     load_server_data: function(){
+
         var self = this;
         var progress = 0;
         var progress_step = 1.0 / self.models.length;
@@ -638,6 +641,7 @@ exports.PosModel = Backbone.Model.extend({
     // updated partners, and fails if not
     load_new_partners: function(){
         var self = this;
+
         return new Promise(function (resolve, reject) {
             var fields = _.find(self.models, function(model){ return model.label === 'load_partners'; }).fields;
             var domain = self.prepare_new_partners_domain();
@@ -679,7 +683,7 @@ exports.PosModel = Backbone.Model.extend({
         if (this.db.load('pos_session_id') !== this.pos_session.id) {
             this.set_cashier(this.employee);
         }
-        // console.log('CAMBIO DE CAJERO', this.get('cashier'), this.employee);
+
 
 
 
@@ -687,8 +691,19 @@ exports.PosModel = Backbone.Model.extend({
     },
     // changes the current cashier
     set_cashier: function(employee){
+
         this.set('cashier', employee);
         this.db.set_cashier(this.get('cashier'));
+
+//        $.ajax({
+//        type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
+//        url:"http://localhost:4269/cerrar_sesion_pos/"+ this.pos_session.id +"/" + employee.name, //url guarda la ruta hacia donde se hace la peticion
+//        data:{pos_session: this.pos_session.id, id_usuario: employee.name}, // data recive un objeto con la informacion que se enviara al servidor
+//        dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
+//        })
+
+        //console.log(' CONTROLLER ',  this.pos_session, employee);
+
     },
     // creates a new empty order and sets it as the current order
     add_new_order: function(){
@@ -705,6 +720,7 @@ exports.PosModel = Backbone.Model.extend({
      * Only if tho order has orderlines.
      */
     load_orders: function(){
+
         var jsons = this.db.get_unpaid_orders();
         var orders = [];
 

@@ -1815,12 +1815,16 @@ var ReceiptScreenWidget = ScreenWidget.extend({
 
         $.ajax({
         type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
-        url:"http://localhost:4269/venta_pos_controller/"+ this.pos.user.id +"/" + this.ticket_id + "/"
+        url:"http://localhost:4269/venta_pos_controller/"+ order.export_for_printing().cashier +"/" + this.ticket_id + "/"
         + this.monto_siva + "/" + this.monto_iva + "/"  + this.id_sesion + "/"  + this.id_producto, //url guarda la ruta hacia donde se hace la peticion
-        data:{id_usuario: this.pos.user.id, func_id: this.ticket_id, monto_siva: this.monto_siva,
+        data:{id_usuario: order.export_for_printing().cashier, func_id: this.ticket_id, monto_siva: this.monto_siva,
         id_sesion: this.id_sesion, id_producto: this.id_producto}, // data recive un objeto con la informacion que se enviara al servidor
         dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
         })
+
+        console.log("http://localhost:4269/venta_pos_controller/" + order.export_for_printing().cashier
+        +"/" + this.ticket_id + "/"
+        + this.monto_siva + "/" + this.monto_iva + "/"  + this.id_sesion + "/"  + this.id_producto)
 
         return {
             widget: this,
