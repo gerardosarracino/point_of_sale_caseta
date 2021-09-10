@@ -14,6 +14,7 @@
         'security/ir.model.access.csv',
         'data/default_barcode_patterns.xml',
         'data/digest_data.xml',
+        'data/paperformat.xml',
         'wizard/pos_box.xml',
         'wizard/pos_details.xml',
         'wizard/pos_payment.xml',
@@ -48,4 +49,5 @@
     'application': True,
     'qweb': ['static/src/xml/pos.xml'],
     'website': 'https://www.odoo.com/page/point-of-sale-shop',
+    'license': 'LGPL-3',
 }

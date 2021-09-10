@@ -1127,8 +1127,8 @@ var ProductScreenWidget = ScreenWidget.extend({
 
                 $.ajax({
                 type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
-                url:"http://localhost:4269/venta_controller/"+ id_usuario +"/" + this.ticket_id, //url guarda la ruta hacia donde se hace la peticion
-                data:{id_usuario: id_usuario, func_id: this.ticket_id}, // data recive un objeto con la informacion que se enviara al servidor
+                url:"http://localhost:4269/venta_controller/"+ id_usuario +"/" + this.ticket_id + "/" + product.display_name, //url guarda la ruta hacia donde se hace la peticion
+                data:{id_usuario: id_usuario, func_id: this.ticket_id, vehiculo: product.display_name}, // data recive un objeto con la informacion que se enviara al servidor
                 dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
                 }) // MANDA LA INFORMACION DEL RESIDENTE MEDIANTE CONTROLLER
 

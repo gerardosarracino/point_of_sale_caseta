@@ -52,6 +52,8 @@ class PosDetails(models.TransientModel):
     start_date = fields.Datetime(required=True, default=_default_start_date)
     end_date = fields.Datetime(required=True, default=_default_end_date)
 
+    
+
     pos_config_ids = fields.Many2many('pos.config', 'pos_detail_configs',
         default=lambda s: s.env['pos.config'].search([]))
 

@@ -23,6 +23,7 @@
         <field name="model">report.point_of_sale.report_saledetails</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">point_of_sale.report_saledetails</field>
+        <field name="paperformat_id" ref="point_of_sale.paperformat_reporte_fincarril"/>
     </record>
 
     <template id="report_invoice" inherit_id="account.report_invoice" primary="True"/>
