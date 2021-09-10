@@ -13,6 +13,13 @@ class PosDetails(models.TransientModel):
     _description = 'Point of Sale Details Report'
 
     def _default_start_date(self):
+        fecha_hoy = time.strftime("%Y-%m-%d", time.localtime())
+        dt = datetime.strptime(str(fecha_hoy), '%Y-%m-%d')
+        old_tz = pytz.timezone('UTC')
+        new_tz = pytz.timezone('MST')
+        fecha_hoy = old_tz.localize(dt).astimezone(new_tz)
+        ff = datetime.strftime(fecha_hoy, '%Y-%m-%d')
+
         fecha_dma3 = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         dt = datetime.strptime(str(fecha_dma3), '%Y-%m-%d %H:%M:%S')
         fecha_dma3 = datetime.strftime(dt, '%Y-%m-%d')
@@ -21,22 +28,25 @@ class PosDetails(models.TransientModel):
             fecha_dma3 = fecha_dma3 + ' 07:00:00'
         if hora >= '15:00:00' and hora <= '22:59:59':
             fecha_dma3 = fecha_dma3 + ' 15:00:00'
-        if hora >= '23:00:00' and hora <= '06:59:59':
-            fecha_dma3 = fecha_dma3 + ' 23:00:00'
-        return fecha_dma3
+        if hora >= '23:00:00' and hora <= '23:59:59' or hora >= '00:00:00' and hora <= '06:59:59':
+            ff = ff + ' 23:00:00'
+            fecha_dma3 = ''
+            print(fecha_dma3, ' xx ')
+        print('fecha', hora)
+        return fecha_dma3 or ff
 
     def _default_end_date(self):
         fecha_dma3 = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         dt = datetime.strptime(str(fecha_dma3), '%Y-%m-%d %H:%M:%S')
         fecha_dma3 = datetime.strftime(dt, '%Y-%m-%d')
         hora = datetime.strftime(dt, '%H:%M:%S')
-        turno = ''
         if hora >= '07:00:00' and hora <= '14:59:59':
             fecha_dma3 = fecha_dma3 + ' 14:59:00'
         if hora >= '15:00:00' and hora <= '22:59:59':
             fecha_dma3 = fecha_dma3 + ' 22:59:59'
-        if hora >= '23:00:00' and hora <= '06:59:59':
+        if hora >= '23:00:00' and hora <= '23:59:59' or hora >= '00:00:00' and hora <= '06:59:59':
             fecha_dma3 = fecha_dma3 + ' 06:59:59'
+            print('aqui x2', fecha_dma3)
         return fecha_dma3
 
     start_date = fields.Datetime(required=True, default=_default_start_date)
@@ -45,7 +55,7 @@ class PosDetails(models.TransientModel):
     pos_config_ids = fields.Many2many('pos.config', 'pos_detail_configs',
         default=lambda s: s.env['pos.config'].search([]))
 
-    @api.onchange('start_date')
+    '''@api.onchange('start_date')
     def _onchange_start_date(self):
         if self.start_date and self.end_date and self.end_date < self.start_date:
             self.end_date = self.start_date
@@ -53,7 +63,7 @@ class PosDetails(models.TransientModel):
     @api.onchange('end_date')
     def _onchange_end_date(self):
         if self.end_date and self.end_date < self.start_date:
-            self.start_date = self.end_date
+            self.start_date = self.end_date'''
 
     def generate_report(self):
         data = {'date_start': self.start_date, 'date_stop': self.end_date, 'config_ids': self.pos_config_ids.ids}
