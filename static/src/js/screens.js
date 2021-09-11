@@ -1109,9 +1109,9 @@ var ProductScreenWidget = ScreenWidget.extend({
        if(product.to_weight && this.pos.config.iface_electronic_scale){
            this.gui.show_screen('scale',{product: product});
        }else{
-            console.log('click en peaje ------------------------' );
+            //console.log('click en peaje ------------------------' );
             this.pos.get_order().add_product(product);
-            console.log(product.display_name, ' PRODUCTO ---', this.uid);
+            //console.log(product.display_name, ' PRODUCTO ---', this.uid);
 
             var cashier = this.pos.get_cashier();
             var id_usuario = cashier.user_id[0];
@@ -1124,19 +1124,21 @@ var ProductScreenWidget = ScreenWidget.extend({
                 this.uid = "0" + this.pos.config.carril + date.getFullYear() +("0" + (date.getMonth() + 1)).slice(-2) + date.getDate() +
                 date.getHours() + date.getMinutes() + date.getSeconds() + parseInt(Math.random().toFixed(2)*100);
                 this.ticket_id = _.str.sprintf(this.uid);
-
+                var order = this.pos.get_order();
+                this.id_sesion = order.pos_session_id;
+                console.log(this.id_sesion, ' ID SS', cashier.name);
                 $.ajax({
                 type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
-                url:"http://localhost:4269/venta_controller/"+ id_usuario +"/" + this.ticket_id + "/" + product.display_name, //url guarda la ruta hacia donde se hace la peticion
-                data:{id_usuario: id_usuario, func_id: this.ticket_id, vehiculo: product.display_name}, // data recive un objeto con la informacion que se enviara al servidor
+                url:"http://localhost:4269/venta_controller/"+ cashier.name +"/" + this.ticket_id + "/" + product.display_name + '/' + this.id_sesion, //url guarda la ruta hacia donde se hace la peticion
+                data:{id_usuario: cashier.name, func_id: this.ticket_id, vehiculo: product.display_name, id_sesion: this.id_sesion}, // data recive un objeto con la informacion que se enviara al servidor
                 dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
                 }) // MANDA LA INFORMACION DEL RESIDENTE MEDIANTE CONTROLLER
 
-                //console.log( this.numpad.state.deleteLastChar(), ' metodo borrar');
+                console.log( "http://localhost:4269/venta_controller/"+ cashier.name +"/" + this.ticket_id + "/" + product.display_name + '/' + this.id_sesion, ' HOST');
                 console.log(this.numpad.state.deleteLastChar());
                 this.numpad.state.deleteLastChar();
 
-                this.tempAlert("SE INGRESO EL RESIDENTE!!!", 3000); // MUESTRA ALERTA QUE SE AGREGO EL RESIDENTE
+                this.tempAlert("SE INGRESO EL RESIDENTE!!!", 1500); // MUESTRA ALERTA QUE SE AGREGO EL RESIDENTE
 
 
             } else {

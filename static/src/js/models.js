@@ -2510,7 +2510,7 @@ exports.Order = Backbone.Model.extend({
         }
         console.log(' CONSOLA xxx ', this.pos.config.carril);
 
-
+        var today_receipt = new Date();
         var receipt = {
             orderlines: orderlines,
             paymentlines: paymentlines,
@@ -2540,7 +2540,8 @@ exports.Order = Backbone.Model.extend({
                 hour: date.getHours(),
                 minute: date.getMinutes() ,
                 isostring: date.toISOString(),
-                localestring: this.formatted_validation_date,
+                localestring:  today_receipt.getFullYear()+'-'+(today_receipt.getMonth()+1)+'-'+today_receipt.getDate() +
+                ' ' + today_receipt.getHours() + ":" + today_receipt.getMinutes() + ":" + today_receipt.getSeconds(), //this.formatted_validation_date,
             },
             company:{
                 email: company.email,
