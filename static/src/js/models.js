@@ -2446,7 +2446,7 @@ exports.Order = Backbone.Model.extend({
         this.paymentlines.each(_.bind( function(item) {
             return paymentLines.push([0, 0, item.export_as_JSON()]);
         }, this));
-
+        console.log(this.pos);
         var json = {
             name: this.get_name(),
             amount_paid: this.get_total_paid() - this.get_change(),
@@ -2459,7 +2459,7 @@ exports.Order = Backbone.Model.extend({
             carril: this.pos.config.carril,
             pricelist_id: this.pricelist ? this.pricelist.id : false,
             partner_id: this.get_client() ? this.get_client().id : false,
-            user_id: this.pos.user.id,
+            user_id: '2',//this.pos.user.id,
             employee_id: this.pos.get_cashier().id,
             uid: this.uid,
 
