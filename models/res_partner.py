@@ -4,6 +4,24 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
 
+class Users(models.Model):
+    _inherit = 'res.users'
+
+    numero_usuario = fields.Char('Numero de usuario')
+
+class Empleado(models.Model):
+    _inherit = 'hr.employee'
+
+    numero_usuario = fields.Char('Numero de usuario')
+
+
+
+class EmpleadoPartner(models.Model):
+    _inherit = 'res.partner'
+
+    numero_usuario = fields.Char('Numero de usuario')
+
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 

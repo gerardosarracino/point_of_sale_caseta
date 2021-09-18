@@ -25,6 +25,7 @@ var exports = {};
 
 
 var carril = "";
+var turno = "";
 // var id_ticket = "";
 // The PosModel contains the Point Of Sale's representation of the backend.
 // Since the PoS must work in standalone ( Without connection to the server )
@@ -58,7 +59,7 @@ exports.PosModel = Backbone.Model.extend({
         this.company = null;
         this.user = null;
         this.users = [];
-        this.employee = {name: null, id: null, barcode: null, user_id:null, pin:null};
+        this.employee = {name: null, id: null, barcode: null, user_id:null, pin:null, numero_usuario: null};
         this.employees = [];
         this.partners = [];
         this.taxes = [];
@@ -208,9 +209,10 @@ exports.PosModel = Backbone.Model.extend({
         label: 'load_partners',
         fields: ['name','street','city','state_id','country_id','vat',
                  'phone','zip','mobile','email','barcode','write_date',
-                 'property_account_position_id','property_product_pricelist'],
-        loaded: function(self,partners){
+                 'property_account_position_id','property_product_pricelist', 'numero_usuario'],
+        loaded: function(self,partners, numero_usuario){
             self.partners = partners;
+            console.log(' partner ', self.partners)
             self.db.add_partners(partners);
         },
     },{
@@ -265,7 +267,7 @@ exports.PosModel = Backbone.Model.extend({
 
     {
         model:  'pos.session',
-        fields: ['id', 'name', 'user_id', 'config_id', 'start_at', 'stop_at', 'sequence_number', 'payment_method_ids'],
+        fields: ['id', 'name', 'user_id', 'config_id', 'start_at', 'stop_at', 'sequence_number', 'payment_method_ids', 'turno'],
         domain: function(self){
             var domain = [
                 ['state','=','opened'],
@@ -275,7 +277,7 @@ exports.PosModel = Backbone.Model.extend({
             return domain;
         },
         loaded: function(self, pos_sessions, tmp){
-            console.log(pos_sessions[0], ' SESIONES ');
+            //console.log(pos_sessions[0], ' SESIONES ');
 
             self.pos_session = pos_sessions[0];
             self.pos_session.login_number = odoo.login_number;
@@ -313,10 +315,12 @@ exports.PosModel = Backbone.Model.extend({
        },
     },{
         model:  'res.users',
-        fields: ['name','company_id', 'id', 'groups_id'],
+        fields: ['name','company_id', 'id', 'groups_id', 'lang', 'numero_usuario'],
         domain: function(self){ return [['company_ids', 'in', self.config.company_id[0]],'|', ['groups_id','=', self.config.group_pos_manager_id[0]],['groups_id','=', self.config.group_pos_user_id[0]]]; },
         loaded: function(self,users){
+            console.log(self.pos_session, ' users ');
             users.forEach(function(user) {
+                // console.log(user, ' -- ');
                 user.role = 'cashier';
                 user.groups_id.some(function(group_id) {
                     if (group_id === self.config.group_pos_manager_id[0]) {
@@ -324,11 +328,13 @@ exports.PosModel = Backbone.Model.extend({
                         return true;
                     }
                 });
-                if (user.id === session.uid) {
+                if (user.id === self.pos_session.user_id[0]) { //self.session.uid
+                    console.log(user.numero_usuario, ' si entro -- ');
                     self.user = user;
                     self.employee.name = user.name;
                     self.employee.role = user.role;
-                    self.employee.user_id = [user.id, user.name];
+                    self.employee.user_id = [user.id, user.name, user.numero_usuario];
+                    self.employee.numero_usuario = user.numero_usuario
                 }
             });
             self.users = users;
@@ -2446,7 +2452,7 @@ exports.Order = Backbone.Model.extend({
         this.paymentlines.each(_.bind( function(item) {
             return paymentLines.push([0, 0, item.export_as_JSON()]);
         }, this));
-        console.log(this.pos);
+        //console.log(this.pos);
         var json = {
             name: this.get_name(),
             amount_paid: this.get_total_paid() - this.get_change(),
@@ -2459,7 +2465,7 @@ exports.Order = Backbone.Model.extend({
             carril: this.pos.config.carril,
             pricelist_id: this.pricelist ? this.pricelist.id : false,
             partner_id: this.get_client() ? this.get_client().id : false,
-            user_id: '2',//this.pos.user.id,
+            user_id: this.pos.user.id,
             employee_id: this.pos.get_cashier().id,
             uid: this.uid,
 
@@ -2508,7 +2514,19 @@ exports.Order = Backbone.Model.extend({
                 return qweb.render('subreceipt',{'pos':self.pos,'widget':self.pos.chrome,'order':self, 'receipt': receipt}) ;
             }
         }
-        console.log(' CONSOLA xxx ', this.pos.config.carril);
+        // console.log(' CONSOLA xxx ', cashier, cashier.id);
+
+        var num_usuario = 0;
+        const objeto_usuario = this.pos.users;
+        // console.log(' quequis ', this.pos);
+
+        objeto_usuario.forEach((element) => {
+          //console.log(element.numero_usuario);
+          if (element.name == cashier.name){
+                console.log('entro for', element.numero_usuario, element.name);
+                num_usuario = element.numero_usuario
+            }
+        });
 
         var today_receipt = new Date();
         var receipt = {
@@ -2524,6 +2542,8 @@ exports.Order = Backbone.Model.extend({
             change: this.get_change(),
             name : this.get_name(), // id unica
             carril: this.pos.config.carril, // CARRIL EN EL TICKET
+            turno: this.pos.pos_session.turno, // TURNO EN EL TICKET
+            numero_usuario: num_usuario, // NUM USUARIO EN EL TICKET
             client: client ? client.name : null ,
             invoice_id: null,   //TODO
             cashier: cashier ? cashier.name : null,
