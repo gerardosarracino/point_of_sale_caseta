@@ -320,7 +320,7 @@ exports.PosModel = Backbone.Model.extend({
         loaded: function(self,users){
             console.log(self.pos_session, ' users ');
             users.forEach(function(user) {
-                // console.log(user, ' -- ');
+                console.log(user, ' -- x2 ');
                 user.role = 'cashier';
                 user.groups_id.some(function(group_id) {
                     if (group_id === self.config.group_pos_manager_id[0]) {
@@ -2452,7 +2452,7 @@ exports.Order = Backbone.Model.extend({
         this.paymentlines.each(_.bind( function(item) {
             return paymentLines.push([0, 0, item.export_as_JSON()]);
         }, this));
-        //console.log(this.pos);
+        console.log(this.pos, ' POS ');
         var json = {
             name: this.get_name(),
             amount_paid: this.get_total_paid() - this.get_change(),
@@ -2465,7 +2465,7 @@ exports.Order = Backbone.Model.extend({
             carril: this.pos.config.carril,
             pricelist_id: this.pricelist ? this.pricelist.id : false,
             partner_id: this.get_client() ? this.get_client().id : false,
-            user_id: this.pos.user.id,
+            user_id: 2,//this.pos.user.id,
             employee_id: this.pos.get_cashier().id,
             uid: this.uid,
 
@@ -2518,10 +2518,10 @@ exports.Order = Backbone.Model.extend({
 
         var num_usuario = 0;
         const objeto_usuario = this.pos.users;
-        // console.log(' quequis ', this.pos);
+        console.log(' quequis ', this.pos.users);
 
         objeto_usuario.forEach((element) => {
-          //console.log(element.numero_usuario);
+          console.log(element.name, cashier.name, ' num usuario ');
           if (element.name == cashier.name){
                 console.log('entro for', element.numero_usuario, element.name);
                 num_usuario = element.numero_usuario
