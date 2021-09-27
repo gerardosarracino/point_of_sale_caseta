@@ -217,11 +217,11 @@ class PosSession(models.Model):
 
         print(hora)
         turno = ''
-        if hora >= '07:00:00' and hora <= '14:59:59':
+        if hora >= '06:55:00' and hora <= '14:54:59':
             turno = 'Matutino'
-        if hora >= '15:00:00' and hora <= '22:59:59':
+        if hora >= '14:55:00' and hora <= '22:54:59':
             turno = 'Vespertino'
-        if hora >= '23:00:00' and hora <= '23:59:59' or hora >= '00:00:00' and hora <= '06:59:59':
+        if hora >= '22:55:00' and hora <= '23:59:59' or hora >= '00:00:00' and hora <= '06:54:59':
             turno = 'Nocturno'
         print(turno, ' TURNO ')
 

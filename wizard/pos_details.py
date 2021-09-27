@@ -12,7 +12,7 @@ import psycopg2
 # from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
-class PosDetails(models.TransientModel):
+class PosDetails(models.Model):
     _name = 'pos.details.wizard'
     _description = 'Point of Sale Details Report'
 
