@@ -263,6 +263,14 @@ class PosSession(models.Model):
 
     dolares = fields.Float(string="Entrada de dolares de la sesion")
 
+    # permiso_usuarios = fields.Many2many('res.users',string="Usuarios o carriles que pueden ver los botones con cantidad de cobro")
+
+    # current_user = fields.Many2one('res.users', compute='_get_current_user')
+
+    '''def _get_current_user(self):
+        for rec in self:
+            rec.current_user = self.env.user'''
+
     turno = fields.Char('Turno de la sesion al momento de iniciar')
     
     def action_pos_session_closing_control(self):

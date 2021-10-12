@@ -1095,7 +1095,7 @@ var ProductScreenWidget = ScreenWidget.extend({
     tempAlert: function(msg,duration)
         {
              var el = document.createElement("div");
-             el.setAttribute("style","position:absolute;top:50%;left:50%;background-color:green;");
+             el.setAttribute("style","position:absolute;top:6%;left:45%;background: #5CB811; background: rgba(92,184,17,.9); font-size: 28px;color: white;border: 1px solid #3B7808;");
              el.innerHTML = msg;
              setTimeout(function(){
               el.parentNode.removeChild(el);
@@ -1139,7 +1139,8 @@ var ProductScreenWidget = ScreenWidget.extend({
                 this.numpad.state.deleteLastChar();
 
                 this.tempAlert("SE INGRESO EL RESIDENTE!!!", 1500); // MUESTRA ALERTA QUE SE AGREGO EL RESIDENTE
-
+                var audio = new Audio("../slrc/static/src/sound/sound.mp3");
+                audio.play();
 
             } else {
                 this.gui.show_screen('payment'); // NOS LLEVA A LA VISTA DE VENTA

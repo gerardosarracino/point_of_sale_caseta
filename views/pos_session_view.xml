@@ -11,13 +11,13 @@
                          context="{'balance': 'start'}"/>
                     <button name="action_pos_session_open" type="object" string="Start Session"
                         attrs="{'invisible' : ['|', ('cash_control', '=', False), ('state', '!=', 'opening_control')]}" class="oe_highlight"/>
-                    <button name="open_frontend_cb" type="object" string="Continue Selling" states="opened"
+                    <button name="open_frontend_cb" type="object" string="Continuar Cobro" states="opened"
                         class="oe_highlight"/>
                     <button id="end_session_opened" name="action_pos_session_closing_control" type="object" string="End of Session"
                         attrs="{'invisible' : ['|', ('cash_control', '=', False),('state', '!=', 'opened')]}"
                         class="oe_highlight"/>
 
-                    <button id="validate_opened" name="action_pos_session_closing_control" type="object" string="Validate Closing &amp; Post Entries"
+                    <button id="validate_opened" name="action_pos_session_closing_control" type="object" string="VALIDAR Y CERRAR TURNO"
                         attrs="{'invisible' : ['|', ('cash_control', '=', True),('state', '!=', 'opened')]}"
                         class="oe_highlight"   />
 
@@ -33,9 +33,10 @@
                             class="oe_stat_button"
                             icon="fa-shopping-basket"
                             type="object">
-                            <field name="order_count" widget="statinfo" string="Orders"/>
+                            <field name="order_count" widget="statinfo" string="Tarifas"/>
                         </button>
-                        <button class="oe_stat_button" name="action_stock_picking" type="object" icon="fa-arrows-v" attrs="{'invisible':[('picking_count', '=', 0)]}">
+                        <button class="oe_stat_button" name="action_stock_picking" type="object"
+                                icon="fa-arrows-v" attrs="{'invisible':[('picking_count', '=', 0)]}">
                             <field name="picking_count" widget="statinfo" string="Picking Errors"/>
                         </button>
                         <button
@@ -44,7 +45,8 @@
                             class="oe_stat_button"
                             icon="fa-dollar"
                             >
-                            <field name="total_payments_amount" widget="statinfo" string="Payments"/>
+                            <!--field name="total_payments_amount" widget="statinfo" string="Cobros"/-->
+                            Cobros
                         </button>
                         <button
                             name="show_journal_items"
@@ -72,7 +74,14 @@
                         <!-- DOLARES MOD -->
 
                         <field name="turno" />
-                        <field name="dolares" />
+                        <!--field name="dolares" /-->
+
+                        <!--div class="o_setting_right_pane">
+                            <label for="permiso_usuarios" />
+                            <div>
+                              <field name="permiso_usuarios" />
+                            </div>
+                          </div-->
 
                     </group>
                     <notebook>
