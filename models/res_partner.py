@@ -7,12 +7,12 @@ from odoo.exceptions import UserError
 class Users(models.Model):
     _inherit = 'res.users'
 
-    numero_usuario = fields.Char('Numero de usuario')
+    # numero_usuario = fields.Char('Numero de usuario')
 
 class Empleado(models.Model):
     _inherit = 'hr.employee'
 
-    numero_usuario = fields.Char('Numero de usuario')
+    # numero_usuario = fields.Char('Numero de usuario')
 
 
 

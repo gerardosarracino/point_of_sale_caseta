@@ -58,8 +58,9 @@ class PosController(http.Controller):
         return response
 
     @http.route('/pos/sale_details_report', type='http', auth='user')
-    def print_sale_details(self, date_start=False, date_stop=False, **kw):
+    def print_sale_details(self, date_start=False, date_stop=False, id_informe=False, **kw):
         r = request.env['report.point_of_sale.report_saledetails']
-        pdf, _ = request.env.ref('point_of_sale.sale_details_report').with_context(date_start=date_start, date_stop=date_stop).render_qweb_pdf(r)
+        pdf, _ = request.env.ref('point_of_sale.sale_details_report').with_context(date_start=date_start, date_stop=date_stop, id_informe=id_informe).render_qweb_pdf(r)
+        print(id_informe, ' controller olvg ')
         pdfhttpheaders = [('Content-Type', 'application/pdf'), ('Content-Length', len(pdf))]
         return request.make_response(pdf, headers=pdfhttpheaders)
